@@ -33,3 +33,5 @@
 - Model values covervage is not 100%, but should be according to task description
 - ApiHelper is using hardocded values - should be modular
 - Email template is not perfect but could be useful in determining which server and why are failing
+- I've added couple of screenshots to show jenkins is reporting properly
+    - IN las two build I've checked out `passing` branch to illustrate passing results
