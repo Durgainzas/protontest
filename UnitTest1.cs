@@ -35,22 +35,25 @@ namespace Tests
         [Test]
         public void TestSecureCoreSErver_Expect_SecureCoreServerPresent() 
         {
-            logicalServerList.Find(ls => ls.Features == Features.SecureCoreServer)
-                .Should().NotBeNull("There should be at least one CORE server present");
+            var coreServers = logicalServerList.FindAll(ls => ls.Features == Features.SecureCoreServer);
+            coreServers.Should().NotBeNullOrEmpty("There should be at least one CORE server present");
+            coreServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one CORE server should be running");
         }
 
         [Test]
         public void TestBasicServer_Expect_BasicServerPresent() 
         {
-            logicalServerList.Find(ls => ls.Features == Features.BasicServer)
-                .Should().NotBeNull("There should be at least one Basic server present");
+            var basicServers = logicalServerList.FindAll(ls => ls.Features == Features.BasicServer);
+            basicServers.Should().NotBeNullOrEmpty("There should be at least one Basic server present");
+            basicServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one Basic server should be running");
         }
 
         [Test]
         public void TestFreeSErver_Expect_FreeServerPresent() 
         {
-            logicalServerList.FindAll(s => s.Domain.Contains("-free"))
-                .Should().NotBeNullOrEmpty("There Should be at least one FREE server present");
+            var freeServers = logicalServerList.FindAll(ls => ls.Domain.Contains("-free"));
+            freeServers.Should().NotBeNullOrEmpty("There should be at least one Basic server present");
+            freeServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one Basic server should be running");
         }
     }
 }
