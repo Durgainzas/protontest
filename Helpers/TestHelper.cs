@@ -18,7 +18,7 @@ namespace Tests
             logicalServer.Features.Should().BeAssignableTo<Features>($"LogicalServer {logicalServer.ID} Features should be within specified range!");
             logicalServer.Location.Lat.Should().NotBe(null, $"LogicalServer Latitude {logicalServer.ID} should not be null!");
             logicalServer.Location.Long.Should().NotBe(null, $"LogicalServer Longtitude {logicalServer.ID} should not be null!");
-            logicalServer.Score.Should().BeOfType(typeof(float), $"LogicalServer {logicalServer.ID} Score should be of type float!");
+            logicalServer.Score.Should().BeOfType(typeof(double), $"LogicalServer {logicalServer.ID} Score should be of type float!");
             logicalServer.Status.Should().BeAssignableTo<Status>($"LogicalServer {logicalServer.ID} Status should be within specified range!");
 
             foreach (var server in logicalServer.Servers)
