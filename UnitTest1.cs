@@ -55,5 +55,17 @@ namespace Tests
             freeServers.Should().NotBeNullOrEmpty("There should be at least one Basic server present");
             freeServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one Basic server should be running");
         }
+
+        [Test]
+        public void TestServerLoad_Expect_LoadNotHigh() 
+        {
+            using (new AssertionScope())
+            {
+                foreach (var logicalServer in logicalServerList)
+                {
+                    logicalServer.Load.Should().BeLessThan(90, $"Server {logicalServer.ID} Load should be in acceptable range");
+                }
+            }
+        }
     }
 }
