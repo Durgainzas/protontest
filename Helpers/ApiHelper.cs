@@ -3,6 +3,7 @@ using System.Net;
 using Tests.Models;
 using FluentAssertions;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Tests.Helpers
 {
@@ -15,11 +16,10 @@ namespace Tests.Helpers
             Client = new RestClient();
         }
 
-        public List<LogicalServer> GetVPNServerResponse() 
+        async public Task<List<LogicalServer>> GetVPNServerResponse() 
         {
-            Client.BaseUrl = new System.Uri("https://api.protonmail.ch/vpn/logicals");
 
-            var request = new RestRequest(Method.GET);
+            var request = new RestRequest("https://api.protonmail.ch/vpn/logicals", Method.Get);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("Connection", "keep-alive");
             request.AddHeader("Accept-Encoding", "gzip, deflate");
@@ -29,10 +29,10 @@ namespace Tests.Helpers
             request.AddHeader("Accept", "*/*");
             request.AddHeader("User-Agent", "PostmanRuntime/7.15.2");
 
-            var response = Client.Execute<VPNLogicalsModel>(request);
-            response.StatusCode.Should().Be(HttpStatusCode.OK, "response should be returned correctly");
+            var response = await Client.GetAsync<VPNLogicalsModel>(request);
 
-            return response.Data.LogicalServers;
+            
+            return response.LogicalServers;
         }
     }
 }

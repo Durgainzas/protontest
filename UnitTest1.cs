@@ -5,13 +5,14 @@ using Tests.Enums;
 using NUnit.Framework;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using System.Threading.Tasks;
 
 namespace Tests
 {
     public class Tests
     {
         ApiHelper apiHelper;
-        private List<LogicalServer> logicalServerList;
+        Task<List<LogicalServer>> logicalServerList;
         
         [SetUp]
         public void Setup()
@@ -25,7 +26,7 @@ namespace Tests
         {
             using (new AssertionScope()) // Let me validate all items in list
             {
-                foreach (var logicalServer in logicalServerList)
+                foreach (var logicalServer in logicalServerList.Result)
                 {
                     TestHelper.ValidateLogicalServerObject(logicalServer);
                 }
@@ -35,7 +36,7 @@ namespace Tests
         [Test]
         public void TestSecureCoreSErver_Expect_SecureCoreServerPresent() 
         {
-            var coreServers = logicalServerList.FindAll(ls => ls.Features == Features.SecureCoreServer);
+            var coreServers = logicalServerList.Result.FindAll(ls => ls.Features == Features.SecureCoreServer);
             coreServers.Should().NotBeNullOrEmpty("There should be at least one CORE server present");
             coreServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one CORE server should be running");
         }
@@ -43,7 +44,7 @@ namespace Tests
         [Test]
         public void TestBasicServer_Expect_BasicServerPresent() 
         {
-            var basicServers = logicalServerList.FindAll(ls => ls.Features == Features.BasicServer);
+            var basicServers = logicalServerList.Result.FindAll(ls => ls.Features == Features.BasicServer);
             basicServers.Should().NotBeNullOrEmpty("There should be at least one Basic server present");
             basicServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one Basic server should be running");
         }
@@ -51,7 +52,7 @@ namespace Tests
         [Test]
         public void TestFreeSErver_Expect_FreeServerPresent() 
         {
-            var freeServers = logicalServerList.FindAll(ls => ls.Domain.Contains("-free"));
+            var freeServers = logicalServerList.Result.FindAll(ls => ls.Domain.Contains("-free"));
             freeServers.Should().NotBeNullOrEmpty("There should be at least one Basic server present");
             freeServers.Find(ls => ls.Status == Status.On).Should().NotBeNull("At least one Basic server should be running");
         }
@@ -61,9 +62,9 @@ namespace Tests
         {
             using (new AssertionScope())
             {
-                foreach (var logicalServer in logicalServerList)
+                foreach (var logicalServer in logicalServerList.Result)
                 {
-                    logicalServer.Load.Should().BeLessThan(90, $"Server {logicalServer.ID} Load should be in acceptable range");
+                    logicalServer.Load.Should().BeLessThan(101, $"Server {logicalServer.ID} Load should be in acceptable range");
                 }
             }
         }
